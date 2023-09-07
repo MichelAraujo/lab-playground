@@ -1,0 +1,7 @@
+{
+  "name": "web-socket-from-scratch",
+  "version": "0.0.1",
+  "description": "Implemented websocket protocol from scratch just for learn goals",
+  "dependencies": {
+  }
+}
