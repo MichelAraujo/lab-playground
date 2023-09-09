@@ -24,6 +24,8 @@ server.on('upgrade', (req, socket, head) => {
   console.log('Client connected => ', socketClientKey);
   socket.write(headers);
   socket.on('readable', () => onSocketReadable(socket));
+  const response = sendMessage('hello from server!', socket);
+  socket.write(response);
 });
 
 function onSocketReadable(socket) {
@@ -52,6 +54,33 @@ function unmask(messageEncodedBuffer, maskKey) {
   // Create the byte Array of decoded payload
   const messageDecodeUint8 = Uint8Array.from(messageEncodedBuffer, (element, i) => element ^ maskKey[i % 4]);
   return Buffer.from(messageDecodeUint8.buffer);
+}
+
+function sendMessage(message, socket) {
+  const messageBuffer = Buffer.from(message);
+  const messageSize = messageBuffer.length;
+
+  let dataFrameBuffer;
+
+  const firstByte = 0x80 | 0x01; // End of the message or utf8 opcode as defined in protocol
+  if (messageSize <= SEVEN_BITS_MARKER) {
+    const bytes = [firstByte];
+    dataFrameBuffer = Buffer.from(bytes.concat(messageSize));
+  }
+  // TODO: add a else and throw a error if message is too long
+
+  const totalBufferSize = dataFrameBuffer.byteLength + messageSize;
+
+  const target = Buffer.allocUnsafe(totalBufferSize);
+  let offset = 0;
+
+  const bufferList = [dataFrameBuffer, messageBuffer];
+  for (const buffer of bufferList) {
+    target.set(buffer, offset);
+    offset += buffer.length;
+  }
+
+  return target;
 }
 
 server.listen(port, hostname, 'connection', () => {

@@ -28,7 +28,7 @@
         console.log('WebSocket is connected!');
         webSocket.send('Hello!!');
       }
-      webSocket.onmessage = (msg) => console.log('Message => ', msg);
+      webSocket.onmessage = (msg) => console.log('Message => ', msg.data);
       webSocket.onerror = (error) => console.error(error);
     </script>
   </body>
