@@ -2,12 +2,14 @@ const http = require('node:http');
 const fs = require('node:fs');
 
 const handShakePrepare = require('./handShakePrepare');
+const closeConnection = require('./closeConnection');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 const SEVEN_BITS_MARKER = 125;
 const SIXTEEN_BITS_MARKER = 126;
 const SIXTY_FOUR_MARKER = 127;
+const OPCODE_END_CONNECTION = 1000; // binary
 
 // TODO: add a try/catch to manager errors
 const htmlFile = fs.readFileSync('./index.html', 'utf8');
@@ -24,6 +26,7 @@ server.on('upgrade', (req, socket, head) => {
   const headersResponse = handShakePrepare(socketClientKey);
   socket.write(headersResponse);
   console.log('Client connected => ', socketClientKey);
+
   socket.on('readable', () => onSocketReadable(socket));
 
   const messageResponse = sendMessage('Hello from server!', socket);
@@ -35,12 +38,12 @@ function onSocketReadable(socket) {
   // Discard the first bity of the payload
   const firstByte = socket.read(1);
 
-  console.log('aaaaaa', firstByte[0].toString(2).slice(4));
-  if (firstByte[0].toString(2).slice(4) == 1000) {
-    console.log('close connection');
-
+  // Check for close connection OPCODE in first Bity (check the table)
+  if (firstByte && Number(firstByte[0].toString(2).slice(4)) === OPCODE_END_CONNECTION) {
+    console.log('### Close connection ###');
+    socket.write(closeConnection());
+    return;
   }
-
 
   // Read the second Byte of the payload
   const [ SecondBytePayload ] = socket.read(1); 
@@ -64,10 +67,9 @@ function onSocketReadable(socket) {
   
   // Read the rest of the payload content
   const messageEncodedBuffer = socket.read(messageLength);
-  console.log('buffer', messageLength);
   const content = unmask(messageEncodedBuffer, maskKey).toString('utf8');
 
-  console.log('message =>', content);
+  console.log('### Message => ', content);
 }
 
 function unmask(messageEncodedBuffer, maskKey) {
