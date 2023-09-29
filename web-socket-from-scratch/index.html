@@ -16,168 +16,52 @@
     </style>
   </head>
   <body>
-    <h1>Socket-IO Demo</h1>
+    <h1>Web Socket from Scratch</h1>
+    <span>-----------------------------</span>
+
+    <div id="ball" style="position: absolute;" >#####</div>
+
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
 
     <script>
+      const ball = document.getElementById("ball");
+
+      const newspaperSpinning = [
+        { marginLeft: "500px" }
+      ];
+
+      const newspaperTiming = {
+        duration: 2000,
+        iterations: 1,
+      };
+
       const webSocket = new WebSocket('ws://localhost:3000');
+
+      const ballPosition = {
+        left: 0,
+      };
+
       webSocket.onopen = (event) => {
-        console.log('WebSocket is connected!');
-        const t = `
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry\n
-        final
-        `;
-        webSocket.send(t);
+        window.addEventListener("keypress", (event) => {
+          if (event.key === 'a') {
+            ballPosition.left = ball.getBoundingClientRect().left - 50;
+            ball.style.left = ballPosition.left + "px";
+          }
+          if (event.key === 's') {
+            ballPosition.left = ball.getBoundingClientRect().left + 50;
+            ball.style.left = ballPosition.left + "px";
+          }
+
+          webSocket.send(`left: ${ballPosition.left}`);
+        });
       }
+
       webSocket.onmessage = (msg) => console.log('Message => ', msg.data);
       webSocket.onerror = (error) => console.error(error);
+      webSocket.onclose = () => console.log('### Connection close ###');
     </script>
   </body>
 </html>
