@@ -21,28 +21,15 @@
 
     <div id="ball" style="position: absolute;" >#####</div>
 
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-
     <script>
-      const ball = document.getElementById("ball");
-
-      const newspaperSpinning = [
-        { marginLeft: "500px" }
-      ];
-
-      const newspaperTiming = {
-        duration: 2000,
-        iterations: 1,
-      };
-
       const webSocket = new WebSocket('ws://localhost:3000');
+      const ball = document.getElementById("ball");
 
       const ballPosition = {
         left: 0,
       };
+
+      const childList = [];
 
       webSocket.onopen = (event) => {
         window.addEventListener("keypress", (event) => {
@@ -50,16 +37,21 @@
             ballPosition.left = ball.getBoundingClientRect().left - 50;
             ball.style.left = ballPosition.left + "px";
           }
+
           if (event.key === 's') {
             ballPosition.left = ball.getBoundingClientRect().left + 50;
             ball.style.left = ballPosition.left + "px";
           }
 
-          webSocket.send(`left: ${ballPosition.left}`);
+          webSocket.send(`{"left": ${ballPosition.left}}`);
         });
       }
 
-      webSocket.onmessage = (msg) => console.log('Message => ', msg.data);
+      webSocket.onmessage = (msg) => {
+        const newLeftPosition = JSON.parse(msg.data).left;
+        ball.style.left = newLeftPosition + "px";
+        console.log('### Div position: ', newLeftPosition);
+      }
       webSocket.onerror = (error) => console.error(error);
       webSocket.onclose = () => console.log('### Connection close ###');
     </script>

@@ -10,6 +10,8 @@ const SEVEN_BITS_MARKER = 125;
 const SIXTEEN_BITS_MARKER = 126;
 const SIXTY_FOUR_MARKER = 127;
 const OPCODE_END_CONNECTION = 1000; // binary
+// Storage client connected list to send message like broadcast
+const clientsConnectedList = new Map();
 
 // TODO: add a try/catch to manager errors
 const htmlFile = fs.readFileSync('./index.html', 'utf8');
@@ -22,15 +24,14 @@ const server = http.createServer((req, res) => {
 
 server.on('upgrade', (req, socket, head) => {
   const { 'sec-websocket-key': socketClientKey } = req.headers;
-
   const headersResponse = handShakePrepare(socketClientKey);
   socket.write(headersResponse);
-  console.log('Client connected => ', socketClientKey);
 
+  clientsConnectedList.set(socketClientKey, socket);
+  console.log('### Client connected =>', socketClientKey);
+
+  // Listening for client send data
   socket.on('readable', () => onSocketReadable(socket));
-
-  const messageResponse = sendMessage('Hello from server!', socket);
-  socket.write(messageResponse);
 });
 
 function onSocketReadable(socket) {
@@ -69,7 +70,14 @@ function onSocketReadable(socket) {
   const messageEncodedBuffer = socket.read(messageLength);
   const content = unmask(messageEncodedBuffer, maskKey).toString('utf8');
 
-  console.log('### Message => ', content);
+  /**
+   * Take the data (content message) sended to the client
+   * Mount the data frame to response and send to all connected client like broadcast
+   */
+  const messageResponse = buildDataFrameResponse(content, socket);
+  clientsConnectedList.forEach((client) => {
+    client.write(messageResponse);
+  });
 }
 
 function unmask(messageEncodedBuffer, maskKey) {
@@ -78,7 +86,7 @@ function unmask(messageEncodedBuffer, maskKey) {
   return Buffer.from(messageDecodeUint8.buffer);
 }
 
-function sendMessage(message, socket) {
+function buildDataFrameResponse(message, socket) {
   const messageBuffer = Buffer.from(message);
   const messageSize = messageBuffer.length;
 
