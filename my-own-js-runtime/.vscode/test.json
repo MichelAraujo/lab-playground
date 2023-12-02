@@ -1,0 +1,26 @@
+{
+    "env": {
+        "myIncludePath": [
+            "/home/michel/Workspace/lab/my-own-js-runtime/v8/include",
+            "/home/michel/Workspace/lab/my-own-js-runtime/libuv/include",
+            "/home/michel/Workspace/lab/my-own-js-runtime/myOwnRuntime"
+        ],
+        "myDefines": [
+            "DEBUG",
+            "MY_FEATURE=1"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "Linux",
+            "intelliSenseMode": "linux-gcc-x86",
+            "includePath": [
+                "${myIncludePath}",
+                "/usr/include"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "gnu++17"
+        }
+    ],
+    "version": 4
+}

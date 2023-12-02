@@ -1,7 +1,7 @@
 CXX = ccache g++
 OUTPUT_FILE=bin/moon
 
-define INCLUDEV8
+define INCLUDE
 	v8/include/
 endef
 
@@ -18,7 +18,7 @@ define DEP
 	libuv/libuv.a
 endef
 
-export INCLUDEV8
+export INCLUDE
 export INCLUDEUV
 export OUTPUT_FILE
 
@@ -27,4 +27,4 @@ export DEP
 
 build:
 	mkdir -p bin
-	$(CXX) myOwnRuntime/uv-timers.cpp -I $$INCLUDEV8 -I $$INCLUDEUV -std=c++17 -pthread -o bin/$@ $< -DV8_COMPRESS_POINTERS $$DEP -Wl,--no-as-needed -ldl
+	$(CXX) myOwnRuntime/index.cc -I $$INCLUDE -I $$INCLUDEUV -std=c++17 -pthread -o bin/michelJS $< -DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX $$DEP -Wl,--no-as-needed -ldl
