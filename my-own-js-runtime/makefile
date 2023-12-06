@@ -28,3 +28,6 @@ export DEP
 build:
 	mkdir -p bin
 	$(CXX) myOwnRuntime/index.cc -I $$INCLUDE -I $$INCLUDEUV -std=c++17 -pthread -o bin/michelJS $< -DV8_COMPRESS_POINTERS -DV8_ENABLE_SANDBOX $$DEP -Wl,--no-as-needed -ldl
+
+run:
+	./bin/michelJS ./test.js
