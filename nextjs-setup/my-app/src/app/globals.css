@@ -24,10 +24,40 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+    .cat-image {
+      will-change: transform;
+    }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.hide {
+  animation: hideAnimation 0.5s both;
+}
+
+@keyframes hideAnimation {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.show {
+  animation: showAnimation 0.5s both;
+}
+
+@keyframes showAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
