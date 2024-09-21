@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 230, 230, 230;
+  --background-end-rgb: 230, 230, 230;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  )
+  rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+header {
+  margin-bottom: 42px;
+}
+
+/* Rocket Animation */
+.rocket-container {
+  margin: 32px 0;
+  overflow: hidden;
+}
+
+.rocket {
+  animation: 4s linear 1s infinite running rocketAnimation;
+}
+
+@keyframes rocketAnimation {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+  @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
+}
+
+h1 {
+  font-family: monospace;
+  font-size: 2rem;
+  font-weight: 550;
+  text-align: center;
+  margin: 16px;
+}
+
+/* Input Custom */
+#search-bar form {
+  background-color: cornflowerblue;
+  display: flex;
+}
+
+#search-bar .form-container {
+  width: 100%;
+  text-align: center;
+  padding: 17px;
+}
+
+#search-bar .form-container label {
+  font-family: monospace;
+}
+
+#search-bar #input:focus  + label {
+  outline: 5px solid blue;
+}
+
+.central {
+  margin: 16px;
+}
+
+#english-teacher {
+  margin-top: 28px;
+  margin-bottom: 400px;
+}
+
+#english-teacher h2 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+#english-teacher form {
+  display: flex;
+  flex-direction: column;
+}
+
+#english-teacher button {
+  margin-top: 12px;
+}
+
+#english-teacher .feedback-box {
+  margin-top: 16px;
+  background-color: rgb(201, 220, 255);
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
